@@ -33,7 +33,7 @@ def train_model(X, y):
         'max_depth': [10, 20],
         'min_samples_split': [2, 5]
     }
-    grid_search = GridSearchCV(estimator=rf_model, param_grid=param_grid, cv=5, n_jobs=-1, verbose=2)
+    grid_search = GridSearchCV(estimator=rf_model, param_grid=param_grid, cv=5, n_jobs=1, verbose=2)
     grid_search.fit(X_train, y_train)
     best_model = grid_search.best_estimator_
     y_pred = best_model.predict(X_test)
