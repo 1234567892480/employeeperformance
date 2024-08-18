@@ -11,7 +11,7 @@ from sklearn.metrics import classification_report, accuracy_score
 # Load and preprocess the dataset
 @st.cache_data
 def load_data():
-    df = pd.read_excel('C:\\Users\\HP\\Desktop\\Naima project\\INX_Future_Inc_Employee_Performance_CDS_Project2_Data_V1.8 (1).xls')
+    df = pd.read_excel('INX_Future_Inc_Employee_Performance_CDS_Project2_Data_V1.8 (1).xls')
     df_processed = df.drop(['EmpNumber','Attrition'], axis=1)
     categorical_cols = df_processed.select_dtypes(include=['object']).columns
     for col in categorical_cols:
