@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report, accuracy_score
 
+
 # Load and preprocess the dataset
 @st.cache_data
 def load_data():
@@ -22,6 +23,85 @@ def load_data():
     label_encoder = LabelEncoder()
     y_encoded = label_encoder.fit_transform(y)
     return X, y_encoded, label_encoder
+
+# Your existing code for plotting
+plt.figure(figsize=(18, 12))
+categorical_features = ['Gender', 'EmpDepartment', 'EmpJobRole', 'MaritalStatus', 'BusinessTravelFrequency', 'Attrition']
+for i, feature in enumerate(categorical_features, 1):
+    plt.subplot(2, 3, i)
+    sns.countplot(x=df[feature])
+    plt.title(f'Distribution of {feature}')
+    plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
+
+# Performance Ratings Across Different Departments
+plt.figure(figsize=(10, 6))
+sns.barplot(data=df, x="EmpDepartment", y="PerformanceRating", hue="EmpDepartment")
+plt.title("Departmental vs Performance Rating")
+plt.xlabel("EmpDepartment")
+plt.ylabel("PerformanceRating")
+plt.show()
+
+# New plot for Performance Rating and Age
+sns.relplot(
+    data=df, kind="line",
+    x="Age", y="PerformanceRating",
+    # hue="region",  # Uncomment if you have a 'region' column and want to use it for grouping
+    # units="subject", estimator=None,  # Adjust these parameters as needed
+)
+plt.title("Performance Rating and Age")
+plt.xlabel("Age")
+plt.ylabel("Performance Rating")
+plt.show()
+
+# Set up the figure for multiple plots
+plt.figure(figsize=(15, 10))
+
+# Pie chart for Marital Status analysis
+percent_1 = list(df['MaritalStatus'].value_counts())
+plt.subplot(2, 2, 1)
+plt.pie(percent_1, labels=["Married", "Single", "Divorced"],
+        explode=[0, 0, 0], autopct="%0.2f%%", startangle=46,
+        pctdistance=0.65, textprops={"fontsize": 15, "fontweight": "bold", 'color': "k"})
+plt.title("Marital Status Analysis\n", fontsize=20, fontweight='bold')
+
+# Countplot for Gender vs Marital Status
+plt.subplot(2, 2, 2)
+sns.countplot(x='Gender', hue='MaritalStatus', data=df, palette="YlOrRd")
+plt.title("Marital Status with Gender Analysis\n", fontweight="bold", fontsize=20)
+plt.xlabel("\nGender")
+plt.ylabel("Count\n")
+legend = plt.legend(prop={"size": 13})
+legend.set_title("Marital Status\n", prop={"size": 15, "weight": "bold"})
+plt.setp(legend.get_texts(), color='black')
+legend.draw_frame(False)
+
+# Countplot for Marital status vs Travel Frequency
+plt.subplot(2, 2, 3)
+sns.countplot(x='BusinessTravelFrequency', hue='MaritalStatus', data=df, palette="mako")
+plt.title("Business Travel Frequency by Marital Status", fontweight="bold", fontsize=20)
+plt.xlabel("Travel Frequency")
+plt.ylabel("Count")
+legend = plt.legend(prop={"size": 13})
+legend.set_title("Marital Status", prop={"size": 15, "weight": "bold"})
+plt.setp(legend.get_texts(), color='black')
+legend.draw_frame(False)
+
+# Countplot for Marital Status vs Overtime
+plt.subplot(2, 2, 4)
+sns.countplot(x='OverTime', hue='MaritalStatus', data=df, palette="husl")
+plt.title("Overtime by Marital Status", fontweight="bold", fontsize=20)
+plt.xlabel("Over Time")
+plt.ylabel("Count")
+legend = plt.legend(prop={"size": 13})
+legend.set_title("Marital Status", prop={"size": 15, "weight": "bold"})
+plt.setp(legend.get_texts(), color='black')
+legend.draw_frame(False)
+
+plt.tight_layout(pad=2)
+plt.show()
+
 
 # Train the model
 @st.cache_resource
